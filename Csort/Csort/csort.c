@@ -20,7 +20,8 @@ int main() {
     getchar();
     char *src = scan_str();
     char *dest = (char *) calloc(strlen(src) + 1, 1);
-    
+    csort(src, dest);
+    puts(dest);
     return 0;
 }
 
@@ -67,13 +68,14 @@ void    csort(char *src, char *dest)
     }
     for (int i = 0; i < words; i++)
     {
-        strncat(dest, src + count[i], len_by_index(indx_arr, words + 1, count[i]));
+        strncat(dest, src + count[i], indx_arr[count[i] + 1] - indx_arr[count[i]] - 1);
+        strcat(dest, " ");
     }
 }
 
 int     len_by_index(int *arr, int n, int index)
 {
-    
+    return (arr[index + 1] + arr[index] - 1);
 }
 
 void    make_index_array(int *arr, int words, char *str)
