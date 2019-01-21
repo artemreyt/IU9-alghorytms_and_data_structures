@@ -1,14 +1,8 @@
-//
-//  main.c
-//  Csort
-//
-//  Created by Artem Starshov on 22/01/2019.
-//  Copyright © 2019 Artem Starshov. All rights reserved.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define BUF_SIZE 1000
 
 char    *scan_str(void);
 int     how_many_words(char *str);
@@ -29,7 +23,7 @@ int main() {
 
 char    *scan_str()
 {
-    char buf[1000];
+    char buf[BUF_SIZE];
     int i = 0;
     char c;
     while ((c = getchar()) != '\n')
