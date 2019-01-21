@@ -12,12 +12,13 @@
 
 char    *scan_str(void);
 int     how_many_words(char *str);
+void    csort(char *src, char *dest);
+void    make_index_array(int *arr, int words, char *str);
 
 int main() {
     getchar();
     char *str = scan_str();
-    printf("%d word(s)\n", how_many_words(str));
-    puts(str);
+    
     return 0;
 }
 
@@ -39,6 +40,33 @@ char    *scan_str()
     char *str = (char *) malloc(strlen(buf) + 1);
     strcpy(str, buf);
     return (str);
+}
+
+void    csort(char *src, char *dest)
+{
+    int     words = how_many_words(src);
+    int     *indx_arr = (int *) malloc((words + 1) * sizeof(int));
+    make_index_array(indx_arr, words, src);
+}
+
+void    make_index_array(int *arr, int words, char *str)
+{
+    int i_arr = 0;
+    int i_str = 0;
+    int in_word = 0;
+    while (i_arr <= words)
+    {
+        if (in_word == 0 && str[i_str] != ' ')
+        {
+            arr[i_arr] = i_str;
+            i_arr++;
+            in_word = 1;
+        }
+        else if (in_word == 1 && str[i_str] == ' ')
+            in_word = 0;
+        i_str++;
+    }
+    arr[words + 1] = (int)strlen(str) + 2;
 }
 
 int     how_many_words(char *str)
