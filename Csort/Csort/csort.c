@@ -14,10 +14,12 @@ char    *scan_str(void);
 int     how_many_words(char *str);
 void    csort(char *src, char *dest);
 void    make_index_array(int *arr, int words, char *str);
+int     len_by_index(int *arr, int n, int index);
 
 int main() {
     getchar();
-    char *str = scan_str();
+    char *src = scan_str();
+    char *dest = (char *) calloc(strlen(src) + 1, 1);
     
     return 0;
 }
@@ -47,6 +49,31 @@ void    csort(char *src, char *dest)
     int     words = how_many_words(src);
     int     *indx_arr = (int *) malloc((words + 1) * sizeof(int));
     make_index_array(indx_arr, words, src);
+    int     *count = (int *) calloc(words, sizeof(int));
+    
+    for (int i = 0; i < words; i++)
+    {
+        int len_i = indx_arr[i + 1] - indx_arr[i] - 1;
+        int k = 0;
+        for (int j = 0; j < words; j++)
+        {
+            int len_j = indx_arr[j + 1] - indx_arr[j] - 1;
+            if (len_i > len_j)
+                k++;
+        }
+        while (count[k] != 0)
+            k++;
+        count[k] = indx_arr[i];
+    }
+    for (int i = 0; i < words; i++)
+    {
+        strncat(dest, src + count[i], len_by_index(indx_arr, words + 1, count[i]));
+    }
+}
+
+int     len_by_index(int *arr, int n, int index)
+{
+    
 }
 
 void    make_index_array(int *arr, int words, char *str)
