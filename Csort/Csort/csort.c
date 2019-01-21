@@ -15,6 +15,20 @@ int     how_many_words(char *str);
 void    csort(char *src, char *dest);
 void    make_index_array(int *arr, int words, char *str);
 int     len_by_index(int *arr, int n, int index);
+int     find_len(int *arr, int n, int num);
+
+
+void    print_arr(int *arr, int n)
+{
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    puts("");
+}
+
+
+
+
+
 
 int main() {
     getchar();
@@ -22,6 +36,9 @@ int main() {
     char *dest = (char *) calloc(strlen(src) + 1, 1);
     csort(src, dest);
     puts(dest);
+    
+    free(src);
+    free(dest);
     return 0;
 }
 
@@ -50,6 +67,11 @@ void    csort(char *src, char *dest)
     int     words = how_many_words(src);
     int     *indx_arr = (int *) malloc((words + 1) * sizeof(int));
     make_index_array(indx_arr, words, src);
+    
+    printf("Index array : ");
+    print_arr(indx_arr, words + 1);
+    
+    
     int     *count = (int *) calloc(words, sizeof(int));
     
     for (int i = 0; i < words; i++)
@@ -66,16 +88,34 @@ void    csort(char *src, char *dest)
             k++;
         count[k] = indx_arr[i];
     }
+    
+    printf("Count array : ");
+    print_arr(count, words);
+    
+    
+    
     for (int i = 0; i < words; i++)
     {
-        strncat(dest, src + count[i], indx_arr[count[i] + 1] - indx_arr[count[i]] - 1);
+        strncat(dest, src + count[i], find_len(indx_arr, words, count[i]));
+        printf("After %d strncat : ", i + 1);
+        puts(dest);
         strcat(dest, " ");
     }
+    free(indx_arr);
+    free(count);
 }
 
-int     len_by_index(int *arr, int n, int index)
+int     find_len(int *arr, int n, int num)
 {
-    return (arr[index + 1] + arr[index] - 1);
+    int i = 0;
+    while (i < n){
+        if (arr[i] == num)
+            break;
+        i++;
+    }
+    if (i == n - 1 && arr[i] != num)
+        return (0);
+    return (arr[i + 1] - arr[i] - 1);
 }
 
 void    make_index_array(int *arr, int words, char *str)
@@ -83,7 +123,7 @@ void    make_index_array(int *arr, int words, char *str)
     int i_arr = 0;
     int i_str = 0;
     int in_word = 0;
-    while (i_arr <= words)
+    while (i_arr < words)
     {
         if (in_word == 0 && str[i_str] != ' ')
         {
@@ -95,7 +135,7 @@ void    make_index_array(int *arr, int words, char *str)
             in_word = 0;
         i_str++;
     }
-    arr[words + 1] = (int)strlen(str) + 2;
+    arr[i_arr] = (int)strlen(str) + 1;
 }
 
 int     how_many_words(char *str)
