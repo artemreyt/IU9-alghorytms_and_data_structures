@@ -30,13 +30,13 @@ int main()
 void    scan_arr(date_t *arr, int n)
 {
     for (int i = 0; i < n; i++)
-        scanf("%d %d %d", &arr[i].Day, &arr[i].Month, &arr[i].Year);
+        scanf("%d %d %d", &arr[i].Year, &arr[i].Month, &arr[i].Day);
 }
 
 void    print_arr(date_t *arr, int n)
 {
     for (int i = 0; i < n; i++)
-        printf("%2d %2d %d\n", arr[i].Day, arr[i].Month, arr[i].Year);
+        printf("%d %2d %2d\n", arr[i].Year, arr[i].Month, arr[i].Day);
 }
 
 void    radix_sort(date_t *arr, date_t *dest, int n)

@@ -23,7 +23,7 @@ int main() {
 
 char    *scan_str()
 {
-    char buf[BUF_SIZE];
+    char *buf = (char *) calloc(BUF_SIZE, 1);
     int i = 0;
     char c;
     while ((c = getchar()) != '\n')
@@ -36,8 +36,9 @@ char    *scan_str()
     if (buf[i - 1] == ' ')
         i--;
     buf[i] = '\0';
-    char *str = (char *) malloc(strlen(buf) + 1);
+    char *str = (char *) calloc(strlen(buf) + 1, 1);
     strcpy(str, buf);
+    free(buf);
     return (str);
 }
 
@@ -66,7 +67,8 @@ void    csort(char *src, char *dest)
     for (int i = 0; i < words; i++)
     {
         strncat(dest, src + count[i], find_len(indx_arr, words, count[i]));
-        strcat(dest, " ");
+        if (i < words - 1)
+            strcat(dest, " ");
     }
     
     free(indx_arr);
