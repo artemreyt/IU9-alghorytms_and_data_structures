@@ -41,6 +41,8 @@ void    scan_arr(int *arr, int n)
 int     peak(int *arr, int l, int r, int n)
 {
     int count = 0;
+    if (n == 1)
+        return (1);
     for (int i = l; i <= r; i++)
     {
         if (i && i != n - 1 && arr[i - 1] <= arr[i] && arr[i + 1] <= arr[i])
