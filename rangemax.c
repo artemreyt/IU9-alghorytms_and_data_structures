@@ -20,7 +20,7 @@ int     main()
         {
             int left, right;
             scanf("%d %d", &left, &right);
-            printf("%d", max(arr, left, right));
+            printf("%d\n", max(arr, left, right));
         }
         else
         {

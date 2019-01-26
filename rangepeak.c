@@ -20,7 +20,7 @@ int     main()
         {
             int left, right;
             scanf("%d %d", &left, &right);
-            printf("%d", peak(arr, left, right, n));
+            printf("%d\n", peak(arr, left, right, n));
         }
         else
         {
