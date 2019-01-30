@@ -25,12 +25,13 @@ int     main()
         else
         {
             int index;
-            char *s = (char *) calloc(1001, 1);
+            char *s = (char *) calloc(BUF_SIZE, 1);
             scanf("%d %s", &index, s);
             update(str, s, index);
             free(s);
         }
     }
+    free(str);
     return (0);
 }
 
