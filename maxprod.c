@@ -1,16 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*typedef struct Rational
-{
-    int numerator;
-    int denominator;
-    float value;
-}  rational_t;*/
-
 void        scan_arr(long double *, int);
-//int         more(rational_t l, rational_t r);
-void        get_l_r(long double *arr_prod, int *l, int *r, int n);
+int         all_are_greater_1(long double *arr, int n);
 
 
 int     main()
@@ -19,29 +11,31 @@ int     main()
     scanf("%d", &n);
     long double *arr = (long double *) malloc(n * sizeof(long double));
     scan_arr(arr, n);
-    int n_of_prods = n * (n + 1) / 2;
-    long double *arr_prod = (long double *) malloc(n_of_prods * sizeof(long double));
-    int i_prods = 0;
-    for (int i = 0; i < n; i++)
+    if (all_are_greater_1(arr, n))
+        printf("%d %d\n", 0, n - 1);
+    else
     {
-        long double mult = 1.0;
-        for (int j = i; j < n; j++)
+        long double max = arr[0];
+        int i_max = 0, j_max = 0;
+        for (int i = 0; i < n; i++)
         {
-            mult *= arr[j];
-            arr_prod[i_prods++] = mult;
+            long double mult = 1.0;
+            for (int j = i; j < n; j++)
+            {
+                mult *= arr[j];
+                if (mult > max)
+                {
+                    max = mult;
+                    i_max = i;
+                    j_max = j;
+                }
+            }
         }
+        printf("%d %d", i_max, j_max);
     }
-    int l, r;
-    get_l_r(arr_prod, &l, &r, n);
-    printf("%d %d", l, r);
-    free(arr_prod);
     free(arr);
+    return (0);
 }
-
-/*int         more(rational_t l, rational_t r)
-{
-    return (l.numerator * r.denominator > r.numerator * l.denominator);
-}*/
 
 void         get_l_r(long double *arr_prod, int *l, int *r, int n)
 {
@@ -64,13 +58,13 @@ void         get_l_r(long double *arr_prod, int *l, int *r, int n)
     }
 }
 
-/*rational_t  multiplication(rational_t l, rational_t r)
+int     all_are_greater_1(long double *arr, int n)
 {
-    rational_t result;
-    result.numerator = l.numerator * r.numerator;
-    result.denominator = l.denominator * r.denominator;
-    return (result);
-} */
+    for (int i = 0; i < n; i++)
+        if (arr[i] < 1.0)
+            return (0);
+    return (1);
+}
 
 void    scan_arr(long double *arr, int size)
 {

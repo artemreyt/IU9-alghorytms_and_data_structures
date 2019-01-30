@@ -11,7 +11,7 @@ int     main()
 {
     int m;
     char *str = (char *) calloc(BUF_SIZE, 1);
-    scanf("%s %d", str, &m);
+    scanf("%s\n%d", str, &m);
     for (int i = 1; i <= m; i++)
     {
         char command[4];
@@ -25,9 +25,10 @@ int     main()
         else
         {
             int index;
-            char s[100];
+            char *s = (char *) calloc(1001, 1);
             scanf("%d %s", &index, s);
             update(str, s, index);
+            free(s);
         }
     }
     return (0);
@@ -48,10 +49,13 @@ int     is_hyperdrom(char *str, int l, int r)
 
 void    update(char *str, const char *s, int index)
 {
+    size_t len = strlen(str);
     while (*s)
     {
         str[index] = *s;
         index++;
         s++;
     }
+    if (index > len)
+        str[index] = '\0';
 }
