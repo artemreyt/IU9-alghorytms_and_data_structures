@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5520DC4921FF93B100810F2A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 5520DC4821FF93B100810F2A /* main.c */; };
+		5520DC5021FF93CC00810F2A /* new_rangepeak.c in Sources */ = {isa = PBXBuildFile; fileRef = 5520DC4F21FF93CC00810F2A /* new_rangepeak.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,7 @@
 
 /* Begin PBXFileReference section */
 		5520DC4521FF93B100810F2A /* NewRangePeak */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NewRangePeak; sourceTree = BUILT_PRODUCTS_DIR; };
-		5520DC4821FF93B100810F2A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		5520DC4F21FF93CC00810F2A /* new_rangepeak.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = new_rangepeak.c; path = ../new_rangepeak.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +41,7 @@
 		5520DC3C21FF93B100810F2A = {
 			isa = PBXGroup;
 			children = (
+				5520DC4F21FF93CC00810F2A /* new_rangepeak.c */,
 				5520DC4721FF93B100810F2A /* NewRangePeak */,
 				5520DC4621FF93B100810F2A /* Products */,
 			);
@@ -57,7 +58,6 @@
 		5520DC4721FF93B100810F2A /* NewRangePeak */ = {
 			isa = PBXGroup;
 			children = (
-				5520DC4821FF93B100810F2A /* main.c */,
 			);
 			path = NewRangePeak;
 			sourceTree = "<group>";
@@ -118,7 +118,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5520DC4921FF93B100810F2A /* main.c in Sources */,
+				5520DC5021FF93CC00810F2A /* new_rangepeak.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
