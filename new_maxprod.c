@@ -1,41 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int     scan_arr(double *arr, int n);
-void    get_l_r(double *arr, int n, int *ptr_l, int *ptr_r);
+int     scan_arr(long double *arr, int n);
+void    get_l_r(long double *arr, int n, int *ptr_l, int *ptr_r);
 
 int main()
 {
     int n, m, left, right;
     scanf("%d", &n);
-    double *arr = (double *) malloc(n * sizeof(double));
+    long double *arr = (long double *) malloc(n * sizeof(long double));
     if (scan_arr(arr, n) == n)
         printf("%d %d\n", 0, n - 1);
     else
     {
         get_l_r(arr, n, &left, &right);
         printf("%d %d\n", left, right);
-        free(arr);
     }
+    free(arr);
     return (0);
 }
 
-int     scan_arr(double *arr, int n)
+int     scan_arr(long double *arr, int n)
 {
     int a, b, count = 0;
     for (int i = 0; i < n; i++)
     {
         scanf("%d/%d", &a, &b);
-        arr[i] = (double)a / b;
+        arr[i] = (long double)a / b;
         if (a >= b)
             count++;
     }
     return (count);
 }
 
-void    get_l_r(double *arr, int n, int *ptr_l, int *ptr_r)
+void    get_l_r(long double *arr, int n, int *ptr_l, int *ptr_r)
 {
-    double  max_prod = arr[0],
+    long double  max_prod = arr[0],
             min_prod = 1.0,
             prod = 1.0;
     int     min_pos = -1;
@@ -52,7 +52,7 @@ void    get_l_r(double *arr, int n, int *ptr_l, int *ptr_r)
         else
         {
             prod *= arr[r];
-            double  max_for_r = prod / min_prod;
+            long double  max_for_r = prod / min_prod;
             if (max_prod < max_for_r)
             {
                 max_prod = max_for_r;

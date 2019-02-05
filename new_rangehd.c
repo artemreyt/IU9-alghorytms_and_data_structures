@@ -14,7 +14,7 @@ int     main()
     char *str = (char *) calloc(BUF_SIZE, 1);
     scanf("%s", str);
     n = strlen(str);
-    int  *tree = (int *) calloc(2 * n - 1, sizeof(int));
+    int  *tree = (int *) calloc(4 * n, sizeof(int));
     build_tree(str, tree, 0, 0 , n - 1);
     scanf("%d", &m);
     char *s = (char *) calloc(BUF_SIZE, 1);

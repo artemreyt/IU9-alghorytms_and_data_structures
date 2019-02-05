@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Queue_s
+{
+    int *buffer;
+    int  head;
+    int  tail;
+    int len, buf_size;
+}   Queue;
+
+void    InitQueue(Queue *q)
+{
+    q->buf_size = 4;
+    q->len = 0;
+    q->buffer = (int *) malloc(q->buf_size * sizeof(int));
+    q->head = q->tail = 0;
+}
+
+void    Enqueue(Queue *q, int x)
+{
+    q->len++;
+    if (q->len > q->buf_size)
+    {
+        q->buffer = (int *) realloc(q->buffer, 2 * q->buf_size);
+        q->tail = q->buf_size;
+        int i = 0;
+        while (i < q->head)
+            q->buffer[q->tail++] = q->buffer[i++];
+        q->buf_size *= 2;
+    }
+    q->buffer[q->tail] = x;
+    q->tail = (q->tail + 1) % q->buf_size;
+}
+
+int     Dequeue(Queue *q)
+{
+    q->len--;
+    int result = q->buffer[q->head];
+    q->head = (q->head + 1) % q->buf_size;
+    return (result);
+}
+
+int     main()
+{
+    int n;
+    Queue q;
+    InitQueue(&q);
+    scanf("%d", &n);
+    char command[10];
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%s", command);
+        if (strcmp(command, "ENQ") == 0)
+        {
+            int x;
+            scanf("%d", &x);
+            Enqueue(&q, x);
+        }
+        else if (strcmp(command, "DEQ") == 0)
+            printf("%d\n", Dequeue(&q));
+        else
+            printf("%s\n", (q.len == 0) ? "true" : "false");
+    }
+    free(q.buffer);
+    return (0);
+}
