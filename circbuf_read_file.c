@@ -4,10 +4,10 @@
 
 typedef struct Queue_s
 {
-    int *buffer;
-    int  head;
-    int  tail;
-    int len, buf_size;
+    int     *buffer;
+    int     head;
+    int     tail;
+    int     len, buf_size;
 }   Queue;
 
 void    InitQueue(Queue *q)
@@ -25,7 +25,6 @@ void    Resize(Queue *q)
     do
     {
         new_buffer[i_new] = q->buffer[i];
-        i_new++;
         i = (i + 1) % q->buf_size;
     } while (i != q->tail);
     q->head = 0;
@@ -52,20 +51,21 @@ int     Dequeue(Queue *q)
     return (result);
 }
 
-int     main()
+int     main(int argc, char **argv)
 {
     int n;
+    FILE *fp = fopen(argv[1], "r");
     Queue q;
     InitQueue(&q);
-    scanf("%d", &n);
+    fscanf(fp, "%d", &n);
     char command[10];
     for (int i = 0; i < n; i++)
     {
-        scanf("%s", command);
+        fscanf(fp, "%s", command);
         if (strcmp(command, "ENQ") == 0)
         {
             int x;
-            scanf("%d", &x);
+            fscanf(fp, "%d", &x);
             Enqueue(&q, x);
         }
         else if (strcmp(command, "DEQ") == 0)
@@ -76,3 +76,4 @@ int     main()
     free(q.buffer);
     return (0);
 }
+

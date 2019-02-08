@@ -67,24 +67,25 @@ void    scan_arr(int *arr, int n)
         scanf("%d", arr + i);
 }
 
-int     arrays_are_empty(int *arr_lens, int *index_in_array, int k)
-{
-    for (int i = 0; i < k; i++)
-        if (arr_lens[i] != index_in_array[i])
-            return (0);
-    return (1);
-}
-
 int     main()
 {
     int k;
     scanf("%d", &k);
     int *arr_lens = (int *) malloc(k * sizeof(int));
-    elem_t *heap = (elem_t *) malloc(k * sizeof(elem_t));
-    scan_arr(arr_lens, k);
+    int k_old = k;
+    for (int i = 0, j = 0; i < k_old; i++)
+    {
+        int len;
+        scanf("%d", &len);
+        if (len)
+            arr_lens[j++] = len;
+        else
+            k--;
+    }
     int n = 0;
     for (int i = 0; i < k; i++)
         n += arr_lens[i];
+    elem_t *heap = (elem_t *) malloc(k * sizeof(elem_t));
     elem_t **matrix = (elem_t **) malloc(k * sizeof(elem_t *));
     for (int i = 0; i < k; i++)
     {
@@ -113,7 +114,7 @@ int     main()
         n_output++;
     }
     for (int i = k; i > 0; i--)
-        printf("%d ", Pop(heap, i).value);
+        printf("%d%c", Pop(heap, i).value, i == 1 ? '\n' : ' ');
     for (int i = 0; i < k; i++)
         free(matrix[i]);
     free(matrix);
