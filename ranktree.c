@@ -15,10 +15,11 @@ typedef struct Top_s
 top_t   *Minimum(top_t *root);
 top_t   *Succ(top_t *x);
 void    UpdateCount(top_t *t);
-void    insert(top_t **root, int key, char *value);
+void    Insert(top_t **root, int key, char *value);
 top     *LookUp(top_t *root, int key);
 char    *SearchByRank(top_t *root, int x);
 void    Delete(top_t **root, int k);
+void    free_tree(top_t *root);
 
 int     main()
 {
@@ -32,7 +33,7 @@ int     main()
         if (strcmp(command, "INSERT") == 0)
         {
             char *v = (char *) calloc(VALUE_LEN + 1, 1);
-            insert(&root, x, v);
+            Insert(&root, x, v);
         }
         else if (strcmp(command, "LOOKUP") == 0)
             puts(LookUp(root, x).value);
@@ -75,7 +76,7 @@ void    UpdateCount(top_t *t)
     }
 }
 
-void    insert(top_t **root, int key, char *value)
+void    Insert(top_t **root, int key, char *value)
 {
     if (*root == NULL)
     {
@@ -171,8 +172,22 @@ void    Delete(top_t **root, int k)
     {
         top_t *next = Succ(del);
         ReplaceNode(root, next, next->right);
-        
+        if (del->left != NULL)
+            del->left->parent = next;
+        if (del->right != NULL)
+            del->right->parent = next;
+        ReplaceNode(root, del, next);
     }
     free(del->value);
     free(del);
+}
+
+void    free_tree(top_t *root)
+{
+    if (root->left != NULL)
+        free_tree(root->left);
+    if (root->right != NULL)
+        free_tree(root->right);
+    free(root->value);
+    free(root);
 }
