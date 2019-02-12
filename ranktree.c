@@ -27,7 +27,7 @@ int     main()
     scanf("%d", &n);
     char command[7];
     int x;
-    top_t *root;
+    top_t *root = NULL;
     for (int i = 0; i < n; i++)
     {
         scanf("%s %d", command, &x);
