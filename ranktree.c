@@ -16,7 +16,7 @@ top_t   *Minimum(top_t *root);
 top_t   *Succ(top_t *x);
 void    UpdateCount(top_t *t);
 void    Insert(top_t **root, int key, char *value);
-top     *LookUp(top_t *root, int key);
+top_t   *LookUp(top_t *root, int key);
 char    *SearchByRank(top_t *root, int x);
 void    Delete(top_t **root, int k);
 void    free_tree(top_t *root);
@@ -25,7 +25,8 @@ int     main()
 {
     int n;
     scanf("%d", &n);
-    char command[7], x;
+    char command[7];
+    int x;
     top_t *root;
     for (int i = 0; i < n; i++)
     {
@@ -33,10 +34,11 @@ int     main()
         if (strcmp(command, "INSERT") == 0)
         {
             char *v = (char *) calloc(VALUE_LEN + 1, 1);
+            scanf("%s", v);
             Insert(&root, x, v);
         }
         else if (strcmp(command, "LOOKUP") == 0)
-            puts(LookUp(root, x).value);
+            puts(LookUp(root, x)->value);
         else if (strcmp(command, "DELETE") == 0)
             Delete(&root, x);
         else
@@ -45,7 +47,6 @@ int     main()
     free_tree(root);
     return (0);
 }
-
 
 
 
@@ -80,15 +81,17 @@ void    Insert(top_t **root, int key, char *value)
 {
     if (*root == NULL)
     {
-        *root = new_top;
+        *root = (top_t *) malloc(sizeof(top_t));
+        (*root)->value = value;
         (*root)->left = (*root)->right = (*root)->parent = NULL;
         (*root)->count = 1;
+        (*root)->key = key;
     }
     else
     {
         top_t *current = *root;
         while (!(current->left == NULL && key < current->key)
-               || !(current->right == NULL && key > current->key))
+               && !(current->right == NULL && key > current->key))
         {
             if (key < current->key)
                 current = current->left;
@@ -102,8 +105,9 @@ void    Insert(top_t **root, int key, char *value)
         }
         top_t *new_top = (top_t *) malloc(sizeof(top_t));
         new_top->value = value;
+        new_top->key = key;
         new_top->left = new_top->right = NULL;
-        current->count = 1;
+        new_top->count = 1;
         if (key < current->key)
             current->left = new_top;
         else
@@ -137,16 +141,15 @@ char    *SearchByRank(top_t *root, int x)
         return (root->value);
     if (left_count > x)
         return (SearchByRank(root->left, x));
-    return (SearchByRank(root->right, x - left_count);
+    return (SearchByRank(root->right, x - left_count - 1));
 }
 
 void    ReplaceNode(top_t **root, top_t *old, top_t *new)
 {
     if (new != NULL)
     {
-        new->left = old->left;
-        new->right = old->right;
         new->parent = old->parent;
+        new->count = old->count;
     }
     if (old->parent != NULL)
     {
@@ -162,6 +165,8 @@ void    ReplaceNode(top_t **root, top_t *old, top_t *new)
 void    Delete(top_t **root, int k)
 {
     top_t *del = LookUp(*root, k);
+    del->count--;
+    UpdateCount(del->parent);
     if (del->left == NULL && del->right == NULL)
         ReplaceNode(root, del, NULL);
     else if (del->left == NULL)
@@ -172,10 +177,11 @@ void    Delete(top_t **root, int k)
     {
         top_t *next = Succ(del);
         ReplaceNode(root, next, next->right);
-        if (del->left != NULL)
-            del->left->parent = next;
+        del->left->parent = next;
+        next->left = del->left;
         if (del->right != NULL)
             del->right->parent = next;
+        next->right = del->right;
         ReplaceNode(root, del, next);
     }
     free(del->value);
