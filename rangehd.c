@@ -4,59 +4,84 @@
 
 #define BUF_SIZE 1000001
 
-int     is_hyperdrom(char *str, int l, int r);
-void    update(char *str, const char *s, int index);
+void    build_tree(const char *str, int *tree, int tree_i, int left, int right);
+int     query(int *tree, int tree_i, int left, int right, int l_search, int r_search);
+void    update(int *tree, int tree_i, int left, int right, int i, char *s, int s_len);
 
 int     main()
 {
-    int m;
+    int n, m;
     char *str = (char *) calloc(BUF_SIZE, 1);
-    scanf("%s\n%d", str, &m);
-    for (int i = 1; i <= m; i++)
+    scanf("%s", str);
+    n = strlen(str);
+    int  *tree = (int *) calloc(4 * n, sizeof(int));
+    build_tree(str, tree, 0, 0 , n - 1);
+    scanf("%d", &m);
+    char *s = (char *) calloc(BUF_SIZE, 1);
+    char command[4];
+    int  l, r;
+    for (int i = 0; i < m; i++)
     {
-        char command[4];
         scanf("%s", command);
         if (strcmp(command, "HD") == 0)
         {
-            int l,r;
             scanf("%d %d", &l, &r);
-            printf("%s\n", is_hyperdrom(str, l, r) == 1 ? "YES" : "NO");
+            int result = query(tree, 0, 0, n - 1, l, r);
+            if ((r - l + 1) % 2 == 1)
+                printf("%s\n", (result & (result - 1)) == 0 ? "YES" : "NO");
+            else
+                printf("%s\n", !result ? "YES" : "NO");
         }
         else
         {
-            int index;
-            char *s = (char *) calloc(BUF_SIZE, 1);
-            scanf("%d %s", &index, s);
-            update(str, s, index);
-            free(s);
+            scanf("%d %s", &l, s);
+            int s_len = strlen(s);
+            update(tree, 0, 0, n - 1, l, s, s_len);
+          /*  for (int i = 0; i < 2 * n - 1; i++)
+                printf("tree[%d] = %d\n", i, tree[i]);*/
         }
     }
+    free(s);
+    free(tree);
     free(str);
     return (0);
 }
 
-int     is_hyperdrom(char *str, int l, int r)
+void    build_tree(const char *str, int *tree, int tree_i, int left, int right)
 {
-    int count[26] = {0};
-    for (int i = l; i <= r; i++)
-        count[str[i] - 'a']++;
-    int mod = (r - l + 1) % 2;
-    int k = 0;
-    for (int i = 0; i < 26; i++)
-        if (count[i] % 2 != 0)
-            k++;
-    return (mod == 1) ? (k == 1 ? 1 : 0) : (k == 0 ? 1 : 0);
+    if (left == right)
+        tree[tree_i] = 1 << (str[left] - 'a');
+    else
+    {
+        int middle = (left + right) / 2;
+        build_tree(str, tree, tree_i * 2 + 1, left, middle);
+        build_tree(str, tree, tree_i * 2 + 2, middle + 1, right);
+        tree[tree_i] = tree[tree_i * 2 + 1] ^ tree[tree_i * 2 + 2];
+    }
 }
 
-void    update(char *str, const char *s, int index)
+int     query(int *tree, int tree_i, int left, int right, int l_search, int r_search)
 {
-    size_t len = strlen(str);
-    while (*s)
+    if (left >= l_search && right <= r_search)
+        return (tree[tree_i]);
+    else if (left > r_search || right < l_search)
+        return (0);
+    int middle = (left + right) / 2;
+    return (query(tree, tree_i * 2 + 1, left, middle, l_search, r_search)
+            ^ query(tree, tree_i * 2 + 2, middle + 1, right, l_search, r_search));
+}
+
+void    update(int *tree, int tree_i, int left, int right, int i, char *s, int s_len)
+{
+    if (left == right)
+        tree[tree_i] = 1 << (s[left - i] - 'a');
+    else
     {
-        str[index] = *s;
-        index++;
-        s++;
+        int middle = (left + right) / 2;
+        if (i <= middle)
+            update(tree, tree_i * 2 + 1, left, middle, i, s, s_len);
+        if (i + s_len - 1 >= middle + 1)
+            update(tree, tree_i * 2 + 2, middle + 1, right, i, s, s_len);
+        tree[tree_i] = tree[tree_i * 2 + 1] ^ tree[tree_i * 2 + 2];
     }
-    if (index > len)
-        str[index] = '\0';
 }

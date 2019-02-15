@@ -6,16 +6,15 @@ void 	scan_arr(char **arr, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
-		char *str = (char *) malloc(100);
+		char *str = (char *) calloc(100, sizeof(char));
 		str = fgets(str, 100, stdin);
-		arr[i] = (char *) malloc(strlen(str) + 1);
+		arr[i] = (char *) calloc(strlen(str) + 1, sizeof(char));
 		strncpy(arr[i], str, strlen(str));
 		free(str);
 	}
 }
 
 void 	free_arr(char **arr, int n)
-{
 	for (int i = 0; i < n; i++)
 		free(arr[i]);
 	free(arr);
@@ -59,7 +58,7 @@ void 	siftDown(void *base, size_t nel, size_t width, int (*compare)(const void *
 	while (k <= (int)nel / 2 - 1)
 	{
 		child = 2*k + 1;
-		if (child < nel - 1 && compare((char *)base + (child + 1) * width, (char *)base + child *width))
+		if (child < (int)nel - 1 && compare((char *)base + (child + 1) * width, (char *)base + child *width))
 			child++;
 		if (compare((char *)base + child * width, (char *)base + k * width))
 			swap((char *)base + child * width, (char *)base + k * width , width);

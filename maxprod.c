@@ -1,77 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
-void        scan_arr(long double *, int);
-int         all_are_greater_1(long double *arr, int n);
-
+void    scan_arr(double *arr, int n);
+void    get_left_right(double *arr, int n, int *ptr_l, int *ptr_r);
 
 int     main()
 {
-    int n;
+    int n, left, right;
     scanf("%d", &n);
-    long double *arr = (long double *) malloc(n * sizeof(long double));
+    double *arr = (double *) malloc(n * sizeof(double));
     scan_arr(arr, n);
-    if (all_are_greater_1(arr, n))
-        printf("%d %d\n", 0, n - 1);
-    else
-    {
-        long double max = arr[0];
-        int i_max = 0, j_max = 0;
-        for (int i = 0; i < n; i++)
-        {
-            long double mult = 1.0;
-            for (int j = i; j < n; j++)
-            {
-                mult *= arr[j];
-                if (mult > max)
-                {
-                    max = mult;
-                    i_max = i;
-                    j_max = j;
-                }
-            }
-        }
-        printf("%d %d", i_max, j_max);
-    }
+    get_left_right(arr, n, &left, &right);
+    printf("%d %d\n", left, right);
     free(arr);
     return (0);
 }
 
-void         get_l_r(long double *arr_prod, int *l, int *r, int n)
+void    scan_arr(double *arr, int n)
 {
-    int i_prods = 0;
-    *l = 0;
-    *r = 0;
-    long double max = arr_prod[0];
+    double a, b;
     for (int i = 0; i < n; i++)
     {
-        for (int j = i; j < n; j++)
-        {
-            if (arr_prod[i_prods] > max)
-            {
-                *l = i;
-                *r = j;
-                max = arr_prod[i_prods];
-            }
-            i_prods++;
-        }
+        scanf("%lf/%lf", &a, &b);
+        arr[i] = log2(a / b);
     }
 }
 
-int     all_are_greater_1(long double *arr, int n)
+void    get_left_right(double *arr, int n, int *ptr_l, int *ptr_r)
 {
-    for (int i = 0; i < n; i++)
-        if (arr[i] < 1.0)
-            return (0);
-    return (1);
-}
-
-void    scan_arr(long double *arr, int size)
-{
-    int a, b;
-    for (int i = 0; i < size; i++)
+    double  max_sum = arr[0],
+            sum = 0.0;
+    int     start = 0;
+    *ptr_l = 0;
+    *ptr_r = 0;
+    for (int r = 0; r < n; r++)
     {
-        scanf("%d/%d", &a, &b);
-        arr[i] = (long double)a / b;
+        sum += arr[r];
+        if (sum > max_sum)
+        {
+            max_sum = sum;
+            *ptr_l = start;
+            *ptr_r = r;
+        }
+        if (sum < 0.0)
+        {
+            sum = 0.0;
+            start = r + 1;
+        }
     }
 }

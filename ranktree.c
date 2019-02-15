@@ -165,17 +165,22 @@ void    ReplaceNode(top_t **root, top_t *old, top_t *new)
 void    Delete(top_t **root, int k)
 {
     top_t *del = LookUp(*root, k);
-    del->count--;
-    UpdateCount(del->parent);
-    if (del->left == NULL && del->right == NULL)
-        ReplaceNode(root, del, NULL);
-    else if (del->left == NULL)
-        ReplaceNode(root, del, del->right);
-    else if (del->right == NULL)
-        ReplaceNode(root, del, del->left);
+    if (del->left == NULL || del->right == NULL)
+    {
+        del->count--;
+        UpdateCount(del->parent);
+        if (del->left == NULL && del->right == NULL)
+            ReplaceNode(root, del, NULL);
+        else if (del->left == NULL)
+            ReplaceNode(root, del, del->right);
+        else if (del->right == NULL)
+            ReplaceNode(root, del, del->left);
+    }
     else
     {
         top_t *next = Succ(del);
+        next->count--;
+        UpdateCount(next->parent);
         ReplaceNode(root, next, next->right);
         del->left->parent = next;
         next->left = del->left;

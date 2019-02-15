@@ -35,7 +35,7 @@ int 	power2(int *arr, int n)
 	int count = 0;
 	int s;
 	int max_scale = pow2(n) - 1;
-	for (int bit_scale = 1; bit_scale <= max_scale; bit_scale++){
+	for (int bit_scale = 1; bit_scale < max_scale; bit_scale++){
 		s = sum(bit_scale, arr, n);
 		if ((s & (s - 1)) == 0 && s != 0)
 			count++;

@@ -78,15 +78,18 @@ void    Add_or_Change(Node_t **head, int key, int value)
 void    Delete_from_List(Node_t **head, int key)
 {
     Node_t *current = *head, *prev = NULL;
-    while (current->key != key)
+    while (current != NULL && current->key != key)
     {
         prev = current;
         current = current->next;
     }
-    if (prev != NULL)
-        prev->next = current->next;
-    else
-        *head = (*head)->next;
+    if (current != NULL)
+    {
+        if (prev != NULL)
+            prev->next = current->next;
+        else
+            *head = (*head)->next;
+    }
     free(current);
 }
 
